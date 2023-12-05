@@ -7,7 +7,7 @@ const categorizeSchema = new Schema({
     required: true 
   },
   img: {
-    type: String,
+    type: Buffer,
     required: false,
   },
   categories: [

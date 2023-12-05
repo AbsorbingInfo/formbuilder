@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import { Checkbox, Button  } from '@mui/material';
-import ClozeAnsContainer from '../components/ClozeAnsContainer';
-import ClozeAns from '../components/ClozeAns';
-import CatAns from '../components/CatAns';
-import CatAnsContainer from '../components/CatAnsContainer';
+import ClozeAnsContainer from '../components/cloze/ClozeAnsContainer';
+import ClozeAns from '../components/cloze/ClozeAns';
+import CatAns from '../components/categorize/CatAns';
+import CatAnsContainer from '../components/categorize/CatAnsContainer';
 
 const Form = (props) => {
-  const [data, setData] = useState([])
-  console.log(data)
+  const [data, setData] = useState([]);
+  const [imageSrc, setImageSrc] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch('http://localhost:4000/api/form');
       const responseData = await response.json();
       setData(responseData);
+      if (responseData.length > 0 && responseData[0].img && responseData[0].img.data.length > 0) {
+        const uint8Array = new Uint8Array(responseData[0].img.data);
+        const base64Image = btoa(String.fromCharCode.apply(null, uint8Array));
+        setImageSrc(`data:image/jpeg;base64,${base64Image}`);
+      }
     };
   
     fetchData();
@@ -53,20 +58,27 @@ const Form = (props) => {
     setData(updatedData)
   }
 
-
   return (
     <div className='bg-white my-8 text-lg mx-auto h-fit w-4/6 p-4 border-teal-600 border-t-8 border-s-0 border-b-0 shadow-slate-700 shadow-md rounded-lg mb-7 border-l-2' >
       <div className='text-xl font-medium'>
         { data.length > 0 ? data[0].name : ''}
       </div>
       <div>
-        {data.length > 0 ? data[0].img.length > 0 ? <img src='http://localhost:4000/headerimg.jpg' className=' w-56' /> : "" : ""}
+        {imageSrc && <img src={imageSrc} className='w-56' alt='Uploaded' />}
       </div>
       <div className='mt-5'>
         {data.length > 0 && data[1].questions.cloze.map((que, index) => {
           const ans= []
+          let imgSrc = '';
+          if(que.img){
+            const uint8Array = new Uint8Array(que.img.data);
+            const base64Image = btoa(String.fromCharCode.apply(null, uint8Array));
+            imgSrc = `data:image/jpeg;base64,${base64Image}`;
+          }
           return(
-            <div key={index} className='flex border-2 p-4'>
+          <div key={index} className='border-2 p-2'>
+            {imgSrc?.data?.length > 0 && <img src={imgSrc} className='w-56 block' />}
+            <div className='flex p-4'>
               <div className='px-3 w-fit font-semibold text-xl'>
               Q {que.isRequired && <span className='text-red-600 text-2xl'>*</span>}
               </div>  
@@ -87,12 +99,21 @@ const Form = (props) => {
                 </div>
               </div>
             </div>
+          </div>
         )})}
       </div>
       <div className='mt-5'>
         {data.length > 0 && data[1].questions.categorize.map((que, index) => {
+          let imgSrc = '';
+          if(que.img){
+            const uint8Array = new Uint8Array(que.img.data);
+            const base64Image = btoa(String.fromCharCode.apply(null, uint8Array));
+            imgSrc = `data:image/jpeg;base64,${base64Image}`;
+          }
           return(
-            <div key={index} className='flex border-2 p-4 select-none'>
+          <div key={index} className='border-2 p-2'>
+            {imgSrc?.data?.length > 0 && <img src={imgSrc} className='w-56 block' />}
+            <div key={index} className='flex p-4 select-none'>
               <div className='px-3 w-fit font-semibold text-xl'>
               Q {que.isRequired && <span className='text-red-600 text-2xl'>*</span>}
               </div> 
@@ -115,12 +136,21 @@ const Form = (props) => {
                 
               </div>
             </div>
+          </div>
         )})}
       </div>
       <div className='mt-5'>
-        {data.length > 0 && data[1].questions.comprehension.map((que) => {
+        {data.length > 0 && data[1].questions.comprehension.map((que, index) => {
+          let imgSrc = '';
+          if(que.img){
+            const uint8Array = new Uint8Array(que.img.data);
+            const base64Image = btoa(String.fromCharCode.apply(null, uint8Array));
+            imgSrc = `data:image/jpeg;base64,${base64Image}`;
+          }
           return(
-            <div key={que._id} className='flex border-2 p-4 h-96 overflow-auto'>
+          <div key={index} className='border-2 p-2'>
+            {imgSrc?.data?.length > 0 && <img src={imgSrc} className='w-56 block' />}
+            <div  className='flex  p-4 h-96 overflow-auto'>
               <div className='px-3 w-fit font-semibold text-xl'>
               Q {que.isRequired && <span className='text-red-600 text-2xl'>*</span>}
               </div> 
@@ -145,6 +175,7 @@ const Form = (props) => {
                 </div>              
               </div>
             </div>
+          </div>
         )})}
       </div>
       <div className='mt-5 flex justify-end mr-5 mb-5' >

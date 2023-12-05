@@ -7,7 +7,7 @@ const clozeSchema = new Schema({
     required: true 
   },
   img: {
-    type: String,
+    type: Buffer,
     required: false,
   },
   dashs:[{

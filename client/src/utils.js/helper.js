@@ -6,6 +6,7 @@ export const getQuestionData = (type) => {
       isRequired: false,
       questionData: {
         question: "", 
+        img: null,
         categories: [
           {
             id: 1,
@@ -28,6 +29,7 @@ export const getQuestionData = (type) => {
       isRequired: false,
       questionData: {
         question: "",
+        img: null,
         dashs: [
         ],
       },
@@ -39,6 +41,7 @@ export const getQuestionData = (type) => {
       isRequired: false,
       questionData: {
         description: "", 
+        img: null,
         mcqs: [
           {
             id: 1,

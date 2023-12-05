@@ -7,7 +7,7 @@ const comprehensionSchema = new Schema({
     required: true 
   },
   img: {
-    type: String,
+    type: Buffer,
     required: false,
   },
   mcqs: [

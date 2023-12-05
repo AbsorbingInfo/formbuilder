@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react"
-import Categorize from "../components/Categorize"
-import Comprehension from "../components/Comprehension"
-import Cloze from "../components/Cloze"
-import AddIcon from '@mui/icons-material/Add'
+import Categorize from "../components/categorize/Categorize"
+import Comprehension from "../components/comprehension/Comprehension"
+import Cloze from "../components/cloze/Cloze"
 import { Button, TextField, InputLabel  } from '@mui/material'
 import { getQuestionData } from "../utils.js/helper"
 import { v4 as uuidv4 } from 'uuid';
@@ -27,14 +26,20 @@ const CreateForm = () => {
     ]);
     setQuestionId(questionId+1)
   }
-console.log(questions)
+  console.log(questions)
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData();
   
     formData.append('image', event.target.elements.image.files[0]);
     formData.append('formName', formName);
-    formData.append('questions', questions);
+    formData.append('questions', JSON.stringify(questions));
+
+    questions.forEach((question, index) => {
+      if (question.questionData.img) {
+        formData.append(`questionImages-${question.id}`, question.questionData.img);
+      }
+    });
     
     try {
       const response = await fetch('http://localhost:4000/api/form', {
@@ -54,13 +59,6 @@ console.log(questions)
   };
   
 
-  const handleImageUpload = (event) => {
-    const files = event.target.files;
-    setImageFiles((prevFiles) => ({
-      ...prevFiles,
-      [0]:  files[0]
-    }));
-  };
 
   return (
     <div className="my-8">
@@ -84,14 +82,12 @@ console.log(questions)
               type="file"
               max="5242880"
               InputProps={{ inputProps: { accept: 'image/*' } }}
-              onChange={handleImageUpload}
             />
           </div>
         </div>
       </div>
       <div>
         {
-
           questions.map((question, index) => {
             const props = {
               question: questions[index],

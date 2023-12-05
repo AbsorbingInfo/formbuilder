@@ -6,9 +6,12 @@ require("dotenv").config();
 const app = express();
 const configureDb = require('./config');
 
-app.use(cors());
+app.use(cors({
+  origin: ["https://form-builder-front-mu.vercel.app/"],
+  methods: ["POST","GET"],
+  credentials:true
+}));
 app.use(express.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
 configureDb();
 
 const router = require('./routes/router')
