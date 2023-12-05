@@ -11,7 +11,7 @@ const Form = (props) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch('http://localhost:4000/api/form');
+      const response = await fetch('https://formbuilder-api.vercel.app/api/form');
       const responseData = await response.json();
       setData(responseData);
       if (responseData.length > 0 && responseData[0].img && responseData[0].img.data.length > 0) {
