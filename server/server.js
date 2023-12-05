@@ -7,7 +7,7 @@ const app = express();
 const configureDb = require('./config');
 
 app.use(cors({
-  origin: ["https://form-builder-front-mu.vercel.app/"],
+  origin: ["https://formbuilder-client.vercel.app/"],
   methods: ["POST","GET"],
   credentials:true
 }));
