@@ -42,7 +42,7 @@ const CreateForm = () => {
     });
     
     try {
-      const response = await fetch('http://localhost:4000/api/form', {
+      const response = await fetch('https://formbuilder-api.vercel.app/api/form', {
         method: 'POST',
         body: formData
       });
